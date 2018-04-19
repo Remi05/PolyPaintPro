@@ -1,0 +1,12 @@
+export const serviceAccount = {
+    "type": "service_account",
+    "project_id": "polypaintpro",
+    "private_key_id": "f96eaabeecf89f6a3b91c7eb2b6eba2844f65591",
+    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQClDstDgOynYslS\nnD9K4qYw50ZHMKlhb10RNDXG6K3JZKOSZiwtg8e5HJ1uBFVuQTT1xtzcY5Gm6vH4\nJ+Wc7LW8ws3fxO5MpEM99J1v5ZdDxs5wrl5YSHa4wNe5e7sAi0SVSv/8azbCarA7\n9irEotHBSh6T2qW81+BwzamqJbq38vI3TA3bhfhYyhZ1SqTXb47UoT00D8fyeDEh\nGC0+D9qvQEzAfZz/HiTei1jo68z02qdKiIclb8DnC/9sR5ujtaTa+IE5bpa5Xber\nqn/swMGe4n6F/gV+XD7Aoymf4zHHpgBAdXz+U22xvq8ZFfpsG7cxv6waqh1LHVeq\n6kQAcEPvAgMBAAECggEASEjjUau7eE619jzBJy19NLuENpckBqy7qFYiGvs5aJJv\nZCTkwgYNSI80jsLNGxzpcZ1mign89om78D6guwmbSZBSkuXuqpfhbteavy9gAGmn\nbQef/6+0dpLVpsB+E+3p2ivfUY8uixQoHAphjn3zuF+aZowBu2MbQqt+2ynszLOe\ncQRYVZyAkJWjf8K8J4b3P7ZUb70cbHN7XXjA84NbDpUjHy7satuv6RAMFAfxu1X2\nmeKle+AHy/sosU6fv32pkgL63l+i2BtXGwKg482wlg/iMb4gp84W/EbKlNYUMTME\niGyE5qVV9UP3kynN1U8vyKJmxLpjv9kaY72SqfJJIQKBgQDnzQOfziIUYcLwpk2w\nbefrlToSDdN6cHf69Kb3wvS76ZUKd5+cwGMemc9XcjODtKesdkB/DiyGFWW6/o/6\nwLP/XL5EAidXbq/FrcJpXYz0HaeB2th88CmLzpIsZdiJgeyQEdjvnXS3m93M6lzT\nzWDIKnNiv6Pfts0RfPRjc48JMQKBgQC2SgpovJSdzZFq9VA15/jot0tfuHd5PojA\n9Ar4IT0dzzPGeDGkpKmJCk2Em3EDGt1YARK5nvXGeyzCWcLt1a1NelVrBgmzTTqT\n8yt56Q/IOgV+gT1c5156X+B+rfH+l+FmcmiXzcscEPSdcDmcOSnCHsOAbHg4HlO7\nmQ7NvkbXHwKBgQC38UJc/9CfZ+yv1uhzhuOxWJvaU8prsPAk3xvYJIbcz0EMK10n\noKuHTvrwI5mpfCRKgRQxPugqBrTRrMxIab7sd4YspaDeiuFE9tv9jNUbqqSQMT/1\n9QajAOuR+8fXZph4wxDpJIPIaBGcWKYNFT8l2Dn0NKswDfmxVP0CJmNtIQKBgGlG\nn3ZXmtj79MS5wkYvn1//I6e3aEB8bgxJpOAiiiJiHPu9RKZadpLvgU9ZWk45wKVn\nkUHkXPrw/iuMHXiv0/OP+C7kAMwtiOwTHwO8JuIzKCMkTqUN9lFkd8mRedXYL1O0\nNVWeg3PFExCt1Ie1t7klfTD49AEs+py4S4VlI5JvAoGBALS5R2ae3x+tIVWuutPI\nW/zfNfvx+fyQul38QEq4in8WgYBYHBF842bDYoioT0po86zjlDfKxwxq9gCwWh+t\nY6bed2mVUu7YFgtC+6RCXseNsnZLITXYttsxOie7Bgs/7Q3cnbOvYBHG2m+0e79Y\nOBOrj7tYVTzEn41/ijeDG2aQ\n-----END PRIVATE KEY-----\n",
+    "client_email": "firebase-adminsdk-odb2l@polypaintpro.iam.gserviceaccount.com",
+    "client_id": "105215385013857984363",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://accounts.google.com/o/oauth2/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-odb2l%40polypaintpro.iam.gserviceaccount.com"
+}

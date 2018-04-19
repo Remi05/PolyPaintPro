@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Slofth.Firebase</id>
+    <version>0.0.12-alpha</version>
+    <title>Wrapper for Firebase, by Slofth.</title>
+    <authors>Slofth</authors>
+    <owners>Aboisier</owners>
+    <licenseUrl>https://github.com/Aboisier/Slofth.Firebase/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Aboisier/Slofth.Firebase</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Wrapper for Firebase, by Slofth</description>
+    <releaseNotes>Initial commit.</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags></tags>
+  </metadata>
+</package>

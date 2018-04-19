@@ -1,0 +1,198 @@
+﻿<Window x:Class="PolyPaint.Views.AppView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:converters="clr-namespace:PolyPaint.Converters"
+        xmlns:social="clr-namespace:PolyPaint.Views.Social"
+        mc:Ignorable="d" 
+        d:DesignHeight="300" d:DesignWidth="300"
+        Title="Poly Paint" Height="550" MinHeight="550" Width="910" MinWidth="910" FontFamily="Roboto" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="DockPanelStyle" TargetType="{x:Type DockPanel}">
+            <Setter Property="Margin" Value="0,10,0,10"/>
+        </Style>
+        <Style x:Key="SidebarButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#CCCCCC" />
+            <Setter Property="Margin" Value="-3,0,7,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SidebarIconStyle" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Width" Value="30" />
+        </Style>
+        <Style x:Key="SidebarTextStyle" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}" />
+            <Setter Property="Margin" Value="0,0,15,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Visibility" Value="{Binding Path=IsSidebarExpanded, Converter={StaticResource BoolToVisibleConverter}}" />
+        </Style>
+    </Window.Resources>
+    <DockPanel>
+        <Grid DockPanel.Dock="Left" Background="#222222">
+            <Grid.Effect>
+                <DropShadowEffect BlurRadius="12" Direction="0" Opacity="0.15"/>
+            </Grid.Effect>
+            <DockPanel  VerticalAlignment="Stretch" LastChildFill="False" >
+                <DockPanel DockPanel.Dock="Top" Style="{StaticResource DockPanelStyle}">
+                    <Button Name="MenuButton"
+                            Command="{Binding ToggleSideBarExpandedCommand}"
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Margin="6,0,4,0">
+                        <Label Style="{StaticResource SidebarIconStyle}">
+                            <fa:FontAwesome Icon="Bars" />
+                        </Label>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Top" Style="{StaticResource DockPanelStyle}"
+                           Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVisibleConverter}}">
+                    <Image Width="10" Source="/Resources/arrow-right-sidebar-gray.png" DockPanel.Dock="Left" 
+                           Visibility="{Binding IsPageActive[0], Converter={StaticResource BoolToVisibleFromHiddenConverter}}"/>
+                    <Button Name="HomeButton" DockPanel.Dock="Right"
+                            Command="{Binding GoToPageCommand}"
+                            CommandParameter="{Binding HomePage}"
+                            Style="{StaticResource SidebarButtonStyle}" Margin="-3,0,7,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Style="{StaticResource SidebarIconStyle}">
+                                <fa:FontAwesome Icon="Home" />
+                            </Label>
+                            <Label Content="Home" Style="{StaticResource SidebarTextStyle}"/>
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Top" Style="{StaticResource DockPanelStyle}"
+                           Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVisibleConverter}}">
+                    <Image Width="10" Source="/Resources/arrow-right-sidebar-gray.png" DockPanel.Dock="Left"
+                           Visibility="{Binding IsPageActive[2], Converter={StaticResource BoolToVisibleFromHiddenConverter}}"/>
+                    <Button Name="ProfileButton" DockPanel.Dock="Right"
+                            Command="{Binding GoToPageCommand}"
+                            CommandParameter="{Binding UserProfilePage}"
+                            Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Style="{StaticResource SidebarIconStyle}">
+                                <fa:FontAwesome Icon="User" />
+                            </Label>
+                            <Label Content="Profile" Style="{StaticResource SidebarTextStyle}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Top" Style="{StaticResource DockPanelStyle}"
+                           Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVisibleConverter}}">
+                    <Image Width="10" Source="/Resources/arrow-right-sidebar-gray.png" DockPanel.Dock="Left"
+                           Visibility="{Binding IsPageActive[3], Converter={StaticResource BoolToVisibleFromHiddenConverter}}"/>
+                    <Button Name="SearchButton" DockPanel.Dock="Right"
+                            Command="{Binding GoToPageCommand}"
+                            CommandParameter="{Binding SearchPage}"
+                            Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Style="{StaticResource SidebarIconStyle}">
+                                <fa:FontAwesome Icon="Search" />
+                            </Label>
+                            <Label Content="Search" Style="{StaticResource SidebarTextStyle}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Top" Style="{StaticResource DockPanelStyle}">
+                    <Image Width="10" Source="/Resources/arrow-right-sidebar-gray.png" DockPanel.Dock="Left"
+                           Visibility="{Binding IsPageActive[4], Converter={StaticResource BoolToVisibleFromHiddenConverter}}"/>
+                    <Button Name="DrawButton" DockPanel.Dock="Right"
+                            Command="{Binding GoToPageCommand}"
+                            CommandParameter="{Binding DrawingSelectionPage}"
+                            Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Style="{StaticResource SidebarIconStyle}">
+                                <fa:FontAwesome Icon="PaintBrush" />
+                            </Label>
+                            <Label Content="Draw" Style="{StaticResource SidebarTextStyle}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Top" Style="{StaticResource DockPanelStyle}"
+                           Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVisibleConverter}}">
+                    <Image Width="10" Source="/Resources/arrow-right-sidebar-gray.png" DockPanel.Dock="Left"
+                           Visibility="{Binding IsPageActive[5], Converter={StaticResource BoolToVisibleFromHiddenConverter}}"/>
+                    <Button Name="AchievementsButton" DockPanel.Dock="Right"
+                            Command="{Binding GoToPageCommand}" 
+                            CommandParameter="{Binding AchievementsPage}" 
+                            Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Label FontSize="22" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                                <fa:FontAwesome Icon="Trophy" />
+                            </Label>
+                            <Label Content="Achievements" Style="{StaticResource SidebarTextStyle}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Bottom" Style="{StaticResource DockPanelStyle}">
+                    <Image Width="10" Source="/Resources/arrow-right-sidebar-gray.png" DockPanel.Dock="Left"
+                           Visibility="{Binding IsPageActive[6], Converter={StaticResource BoolToVisibleFromHiddenConverter}}"/>
+                    <Button Name="TutorialButton" DockPanel.Dock="Right"
+                            Command="{Binding GoToPageCommand}"
+                            CommandParameter="{Binding TutorialPage}"
+                            Style="{StaticResource SidebarButtonStyle}">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Style="{StaticResource SidebarIconStyle}">
+                                <fa:FontAwesome Icon="QuestionCircleOutline" FontSize="23"/>
+                            </Label>
+                            <Label Content="Tutorial" Style="{StaticResource SidebarTextStyle}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Bottom" Style="{StaticResource DockPanelStyle}"
+                           Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToCollapsedConverter}}">
+                    <Image Width="10" Source="/Resources/arrow-right-sidebar-gray.png" DockPanel.Dock="Left" VerticalAlignment="Center"
+                           Visibility="{Binding IsPageActive[1], Converter={StaticResource BoolToVisibleFromHiddenConverter}}"/>
+                    <Button Name="LoginButton" DockPanel.Dock="Right"
+                            Command="{Binding GoToPageCommand}"
+                            CommandParameter="{Binding LoginPage}"
+                            Style="{StaticResource SidebarButtonStyle}" Margin="-3,0,7,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Style="{StaticResource SidebarIconStyle}">
+                                <fa:FontAwesome Icon="SignIn" />
+                            </Label>
+                            <Label Content="Login" Style="{StaticResource SidebarTextStyle}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+                <DockPanel DockPanel.Dock="Bottom" Style="{StaticResource DockPanelStyle}"
+                           Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVisibleConverter}}">
+                    <Button Name="LogoutButton" DockPanel.Dock="Right"
+                            Command="{Binding LogoutCommand}" 
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Margin="8,0,4,0">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Style="{StaticResource SidebarIconStyle}">
+                                <fa:FontAwesome Icon="SignOut" />
+                            </Label>
+                            <Label Content="Logout" Style="{StaticResource SidebarTextStyle}" />
+                        </StackPanel>
+                    </Button>
+                </DockPanel>
+            </DockPanel>
+        </Grid>
+        <Grid DockPanel.Dock="Bottom">
+            <ContentControl Content="{Binding CurrentPage}" Grid.Row="0" />
+            <ContentControl Content="{Binding ConversationsView}" Grid.Row="0" />
+        </Grid>
+    </DockPanel>
+</Window>

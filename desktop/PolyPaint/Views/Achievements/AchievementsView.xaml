@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="PolyPaint.Views.Achievements.AchievementsView"
+             x:Name="This"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:PolyPaint.Converters"
+             xmlns:clr="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+             d:DesignHeight="486" d:DesignWidth="780.75">
+
+    <UserControl.Resources>
+        <clr:Double x:Key="AchievementSize">225</clr:Double>
+
+        <Style x:Key="AchievementStyle" BasedOn="{ StaticResource QuickFadeInStackPanel }" TargetType="StackPanel">
+            <Setter Property="Height" Value="{StaticResource AchievementSize}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="58" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Padding="10,10,10.5,5"
+               FontFamily="Roboto" 
+               FontSize="36" 
+               Content="Achievements" 
+               VerticalAlignment="Top"
+               Background="White">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="12" Direction="90" ShadowDepth="3" Opacity="0.35"/>
+            </Label.Effect>
+        </Label>
+
+        <ScrollViewer Grid.Row="1" Name="AchievementsScrollViewer">
+            <ItemsControl ItemsSource="{Binding Achievements}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Grid.Row ="1" Style="{StaticResource AchievementStyle}">
+                            <Image Source="{Binding IconUri}" 
+                                   Visibility="{Binding Completed, 
+                                   Converter={StaticResource BoolToVisibleConverter}}" 
+                                   Height="150" 
+                                   Style="{StaticResource FadeInImage}"/>
+                            <Image Source="pack://application:,,,/Resources/locked-flat-circular.png" 
+                                   Visibility="{Binding Completed, Converter={StaticResource BoolToCollapsedConverter}}" 
+                                   Height="150" 
+                                   Style="{StaticResource FadeInImage}"/>
+                            <Label Content="{Binding Name}" FontFamily="Roboto" FontSize="16" Height="40" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid x:Name="AchievementsGrid" Margin="0,20,0,0"
+                                    Columns="{Binding Path=ActualWidth, 
+                                                      ElementName=AchievementsGrid, 
+                                                      Converter={StaticResource WidthToColumnsConverter}, 
+                                                      ConverterParameter={StaticResource AchievementSize}}">
+                        </UniformGrid>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="PolyPaint.Views.Home.HomeView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PolyPaint.Views.Home"
+      mc:Ignorable="d" 
+      xmlns:ppsocial="clr-namespace:PolyPaint.Views.Social"
+      xmlns:ppdrawing="clr-namespace:PolyPaint.Views.Drawing"
+             xmlns:converters="clr-namespace:PolyPaint.Converters"
+             d:DesignHeight="300">
+    <Grid>
+        <DockPanel Grid.Row="0" LastChildFill="True">
+            <ppsocial:StoriesBar x:Name="StoriesBar" 
+                                 DataContext="{Binding StoriesBarViewModel}"
+                                 DockPanel.Dock="Top"
+                                 Height="80"
+                                 Panel.ZIndex="100"
+                                 ShowStoryCommand="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}, Path=DataContext.ShowStoryCommand}">
+                <ppsocial:StoriesBar.Effect>
+                    <DropShadowEffect BlurRadius="14" Direction="90" ShadowDepth="3" Opacity="0.5"/>
+                </ppsocial:StoriesBar.Effect>
+            </ppsocial:StoriesBar>
+            <ppsocial:NewsfeedView DataContext="{Binding NewsfeedViewModel}" />
+        </DockPanel>
+        <Button Command="{Binding HideStoryCommand}"
+                Grid.Row="0" 
+                Panel.ZIndex="100" 
+                Style="{StaticResource BackdropStyle}"
+                Visibility="{Binding Path=IsShowingStory, Converter={StaticResource BoolToVisibleConverter}}">
+            <ppsocial:Story DataContext="{Binding StoryViewModel}"></ppsocial:Story>
+        </Button>
+    </Grid>
+</UserControl>

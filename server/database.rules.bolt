@@ -1,0 +1,8 @@
+path / {
+    read() { auth != null }
+    write() { auth != null }
+}
+
+path /displayNames {
+    index() = ".value";
+}

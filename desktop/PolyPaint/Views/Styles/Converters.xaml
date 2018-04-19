@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:PolyPaint.Converters">
+    <converters:BoolToVisibleConverter x:Key="BoolToVisibleConverter" />
+    <converters:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+    <converters:BoolToHiddenConverter x:Key="BoolToHiddenConverter" />
+    <converters:WidthToColumnsConverter x:Key="WidthToColumnsConverter" />
+    <converters:BoolToVisibleFromHiddenConverter x:Key="BoolToVisibleFromHiddenConverter" />
+    <converters:StorageUrlConverter x:Key="StorageUrlConverter" />
+</ResourceDictionary>

@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="PolyPaint.Views.Messaging.ChatMessage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:PolyPaint.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:IsSenderToBackgroundColorConverter x:Key="IsSenderToBackgroundColorConverter"/>
+        <converters:IsSenderToForegroundColorConverter x:Key="IsSenderToForegroundColorConverter"/>
+        <converters:IsSenderToAligmentConverter x:Key="IsSenderToAligmentConverter"/>
+    </UserControl.Resources>
+    <StackPanel Orientation="Vertical" Margin="5,5,5,5">
+        <Label
+            Content="{Binding Message.SenderName}"
+            FontSize="10"
+            Foreground="#AA000000"
+            HorizontalAlignment="{Binding Path=Message.WasSentByCurrentUser, Converter={StaticResource IsSenderToAligmentConverter}}"/>
+        <Border
+            Background="{Binding Path=Message.WasSentByCurrentUser, Converter={StaticResource IsSenderToBackgroundColorConverter}}"
+            CornerRadius="13"
+            Grid.Row="0"
+            Height="Auto" Width="Auto" MaxWidth="200"
+            HorizontalAlignment="{Binding Path=Message.WasSentByCurrentUser, Converter={StaticResource IsSenderToAligmentConverter}}">
+            <TextBlock Name="Text"    
+                Foreground="{Binding Path=Message.WasSentByCurrentUser, Converter={StaticResource IsSenderToForegroundColorConverter}}"
+                Margin="12, 7, 12, 7" 
+                Text="{Binding Message.Text}"
+                TextWrapping="Wrap"
+                VerticalAlignment="Center"/>
+        </Border>
+        <Label Name="Timestamp"       
+            Content="{Binding Message.Timestamp}"
+            FontSize="10"
+            Foreground="#AA000000"
+            HorizontalAlignment="{Binding Path=Message.WasSentByCurrentUser, Converter={StaticResource IsSenderToAligmentConverter}}"
+            VerticalAlignment="Center"/>
+    </StackPanel>
+</UserControl>

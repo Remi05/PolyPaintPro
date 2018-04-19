@@ -1,0 +1,109 @@
+﻿<Window x:Class="PolyPaint.Views.Drawing.DrawingConfigurationWizard"
+        x:Name="This"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="DrawingConfigurationWizard" AllowsTransparency="True" Background="Transparent" Height="485" Width="415" Topmost="True" WindowStartupLocation="CenterScreen" WindowStyle="None" MouseDown="Window_MouseDown">
+    <Window.Resources>
+        <Style x:Key="DescriptionStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#BBB"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
+            <Setter Property="Width" Value="325"/>
+            <Setter Property="Height" Value="30"/>
+        </Style>
+
+        <Style x:Key="PasswordBoxStyle" TargetType="PasswordBox" BasedOn="{StaticResource TextBoxStyle}">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
+            <Setter Property="Width" Value="175"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+        </Style>
+    </Window.Resources>
+    <Grid RenderTransformOrigin="0,1" Margin="10" Background="White">
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="10" Direction="-90" RenderingBias="Performance" ShadowDepth="3" Color="Black" Opacity="0.25"/>
+        </Grid.Effect>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Name="CloseButton"
+                Grid.Row="0"
+                Grid.Column="2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Command="{Binding CloseCommand}"
+                Style="{StaticResource CloseButtonStyle}">
+            <fa:FontAwesome Icon="Times" />
+        </Button>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
+            <Label Content="Drawing Parameters" FontSize="24" FontFamily="Roboto"  Margin="0,20,0,10" HorizontalAlignment="Center"></Label>
+
+            <Label Content="Protection"  FontSize="16" FontFamily="Roboto"/>
+            <StackPanel Margin="12,0,0,10">
+                <CheckBox x:Name="Protected" IsChecked="{Binding IsProtected, Mode=TwoWay}"  FontSize="13" FontFamily="Roboto" Margin="0,5" Content="Protected"></CheckBox>
+                <StackPanel IsEnabled="{Binding IsProtected}"  Orientation="Horizontal">
+                    <Label FontSize="13" Width="123" FontFamily="Roboto" Content="Password" Margin="0,10,10,0"></Label>
+                    <PasswordBox x:Name="PasswordField" Style="{StaticResource PasswordBoxStyle}"/>
+                </StackPanel>
+                <StackPanel IsEnabled="{Binding IsProtected}"  Margin="0,0,0,5" Orientation="Horizontal">
+                    <Label FontSize="13" FontFamily="Roboto" Content="Confirm Password " Margin="0,10,16,0"></Label>
+                    <PasswordBox x:Name="ConfirmPasswordField" Style="{StaticResource PasswordBoxStyle}"/>
+                </StackPanel>
+                <TextBlock Text="Everyone will be able to edit your drawing" 
+                           Margin="0,10,0,0"
+                           Style="{StaticResource DescriptionStyle}" 
+                           Visibility="{Binding IsProtected, Converter={StaticResource BoolToCollapsedConverter}}"/>
+                <TextBlock Text="People who can see this drawing and know the password can collaborate"
+                           Margin="0,10,0,0"
+                           TextWrapping="Wrap"
+                           Style="{StaticResource DescriptionStyle}"  
+                           Visibility="{Binding IsProtected, Converter={StaticResource BoolToVisibleConverter}}"/>
+            </StackPanel>
+
+            <Label Content="Visibility" Margin="0,10,0,0"  FontSize="16" FontFamily="Roboto"/>
+            <StackPanel Margin="12,0,0,0">
+                <RadioButton FontSize="13" IsChecked="{Binding IsPublic}" FontFamily="Roboto" Margin="0,5" Content="Public" Command="{Binding MakePublicCommand}"></RadioButton>
+                <RadioButton FontSize="13" IsChecked="{Binding IsPrivate, Mode=OneWay}" FontFamily="Roboto" Margin="0,5" Content="Private" Command="{Binding MakePrivateCommand}"></RadioButton>
+                <StackPanel Height="25">
+                    <TextBlock 
+                        Text="Your drawing will be visible by everyone" 
+                        Style="{StaticResource DescriptionStyle}"  
+                        Visibility="{Binding IsPublic, Converter={StaticResource BoolToVisibleConverter}}"
+                        Margin="0,10,0,0"/>
+                    <TextBlock Text="Only you will be able to see this drawing" 
+                               Style="{StaticResource DescriptionStyle}"  
+                               Visibility="{Binding IsPublic, Converter={StaticResource BoolToCollapsedConverter}}"
+                               Margin="0,10,0,0"/>
+                </StackPanel>
+            </StackPanel>
+            <Button Margin="0,40,0,0" 
+                    Visibility="{Binding IsNewDrawing, Converter={StaticResource BoolToVisibleConverter}}"
+                    Command="{Binding SaveCommand}"
+                    CommandParameter="{Binding ElementName=This}" 
+                    Style="{StaticResource BlueButtonStyle}" 
+                    Content="Create drawing"/>
+            <Button Margin="0,40,0,0" 
+                    Visibility="{Binding IsNewDrawing, Converter={StaticResource BoolToCollapsedConverter}}"
+                    Command="{Binding SaveCommand}"
+                    CommandParameter="{Binding ElementName=This}" 
+                    IsDefault="True"
+                    Style="{StaticResource BlueButtonStyle}" 
+                    Content="Done"/>
+        </StackPanel>
+    </Grid>
+</Window>

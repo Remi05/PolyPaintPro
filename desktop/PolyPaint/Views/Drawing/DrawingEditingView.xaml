@@ -1,0 +1,388 @@
+﻿<UserControl x:Class="PolyPaint.Views.Drawing.DrawingEditingView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:fa="http://schemas.fontawesome.io/icons/"
+    xmlns:converters="clr-namespace:PolyPaint.Converters"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+    mc:Ignorable="d"
+    Background="#F0F0F0">
+    <UserControl.Resources>
+        <converters:BorderConverter x:Key="BorderConverter" />
+        <converters:BackgroundColorConverter x:Key="BackgroundColorConverter" />
+        <converters:EditModeConverter x:Key="EditModeConverter" />
+        <converters:GridLengthConverter x:Key="GridLengthConverter" />
+        <converters:BoolToImageSourceConverter x:Key="BoolToImageSourceConverter"/>
+        <SolidColorBrush x:Key="ThemeColor" Color="#FF4080FF"/>
+        <SolidColorBrush x:Key="ThemeColorHovered" Color="#FF80C0FF"/>
+        <Style x:Key="ConnectionButtonsStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="{StaticResource ThemeColor}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource ThemeColorHovered}" />
+                    <Setter Property="Cursor" Value="Hand" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="TopBarButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#555" />
+            <Setter Property="Margin" Value="2,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Background" Value="#F0F0F0" />
+                    <Setter Property="Foreground" Value="#555" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="#BBB"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="SaveButtonStyle" TargetType="{x:Type MenuItem}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#555" />
+            <Setter Property="Margin" Value="2,0" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Background" Value="#F0F0F0" />
+                    <Setter Property="Foreground" Value="#555" />
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Foreground" Value="#BBB"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PencilButtonStyle" BasedOn="{StaticResource TopBarButtonStyle}" TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedTool}" Value="pencil">
+                    <Setter  Property="Background" Value="#CCC" />
+                    <Setter  Property="Foreground" Value="#222" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PointEraserButtonStyle" BasedOn="{StaticResource TopBarButtonStyle}" TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedTool}" Value="efface_segment">
+                    <Setter  Property="Background" Value="#CCC" />
+                    <Setter  Property="Foreground" Value="#222" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="StrokeEraserButtonStyle" BasedOn="{StaticResource TopBarButtonStyle}" TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedTool}" Value="efface_trait">
+                    <Setter  Property="Background" Value="#CCC" />
+                    <Setter  Property="Foreground" Value="#222" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="LassoButtonStyle" BasedOn="{StaticResource TopBarButtonStyle}" TargetType="Button">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding SelectedTool}" Value="lasso">
+                    <Setter  Property="Background" Value="#CCC" />
+                    <Setter  Property="Foreground" Value="#222" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="BackButtonStyle" BasedOn="{StaticResource TopBarButtonStyle}" TargetType="Button">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontFamily" Value="Roboto"/>
+            <Setter Property="Foreground" Value="#F0F0F0"/>
+            <Setter Property="Margin" Value="5,0,5,0"/>
+        </Style>
+
+
+    </UserControl.Resources>
+    <DockPanel>
+        <Border DockPanel.Dock="Top" BorderThickness="0,0,0,0.5" BorderBrush="#77000000">
+            <StackPanel Background="White" Height="40" Orientation="Horizontal">
+                <Button Command="{Binding GoBackCommand}" Style="{StaticResource TopBarButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="🡐 Back" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+                <Button Name="ConfigurationButton" 
+                        Command="{Binding ConfigureCommand}" 
+                        Visibility="{Binding IsOwner, Converter={StaticResource BoolToVisibleConverter}}"
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Cog" />
+                    </Label>
+                </Button>
+                <Button Name="ExportButton" 
+                        Command="{Binding ExportCommand}" 
+                        CommandParameter="{Binding ElementName=DrawingCanvas}"
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Save" />
+                    </Label>
+                </Button>
+                <Button Name="ExportToGDriveButton" 
+                        Command="{Binding SaveOnGoogleDriveCommand}" 
+                        CommandParameter="{Binding ElementName=DrawingCanvas}"
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Google" />
+                    </Label>
+                </Button>
+                <Button Name="ShareOnFacebookButton" 
+                        Command="{Binding ShareOnFacebookCommand}" 
+                        CommandParameter="{Binding ElementName=DrawingCanvas}"
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Facebook" />
+                    </Label>
+                </Button>
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+                <Button x:Name="reset" 
+                        Command="{Binding ResetCommand}" 
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Trash" />
+                    </Label>
+                </Button>
+                <Button x:Name="undo"
+                        Command="{Binding UndoCommand}" 
+                        Height="30" Width="30"
+                        RenderTransformOrigin="0.5,0.5"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Button.RenderTransform>
+                        <ScaleTransform ScaleX="-1" />
+                    </Button.RenderTransform>
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Share" />
+                    </Label>
+                </Button>
+                <Button x:Name="redo"
+                        Command="{Binding RedoCommand}" 
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Share" />
+                    </Label>
+                </Button>
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+                <Button x:Name="Copier"
+                        Command="{Binding DuplicateCommand}" 
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Clone" />
+                    </Label>
+                </Button>
+                <Button x:Name="Couper"
+                        Command="{Binding CutCommand}"
+                        Height="30" Width="30"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Cut" />
+                    </Label>
+                </Button>
+                <Button x:Name="lasso"
+                        Command="{Binding SelectToolCommand}"
+                        CommandParameter="lasso" 
+                        Height="30" Width="30"
+                        Style="{StaticResource LassoButtonStyle}">
+                    <Image Width="20" Source="/Resources/lasso.png" />
+                </Button>
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+                <Button x:Name="pencil"
+                        Command="{Binding SelectToolCommand}"
+                        CommandParameter="pencil" 
+                        Height="30" Width="30"
+                        Style="{StaticResource PencilButtonStyle}">
+                    <Label FontSize="18" Foreground="{Binding Path=Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Button}}}">
+                        <fa:FontAwesome Icon="Pencil" />
+                    </Label>
+                </Button>
+                <Button x:Name="efface_segment"
+                        Command="{Binding SelectToolCommand}"
+                        CommandParameter="efface_segment" 
+                        Height="30" Width="30"
+                        Style="{StaticResource PointEraserButtonStyle}">
+                    <Image Width="20" Source="/Resources/Eraser-Gray.png" />
+                </Button>
+                <Button x:Name="efface_trait"
+                        Command="{Binding SelectToolCommand}"
+                        CommandParameter="efface_trait" 
+                        Height="30" Width="30"
+                        Style="{StaticResource StrokeEraserButtonStyle}">
+                    <Image Width="22" Source="/Resources/big-eraser-gray.png" />
+                </Button>
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+                <xctk:ColorPicker x:Name="selecteurCouleur"
+                                  VerticalContentAlignment="Stretch"
+                                  Background="#CCCCCC"
+                                  ShowDropDownButton="False"
+                                  ShowRecentColors="True"
+                                  BorderThickness="0"
+                                  Margin="10,0,0,0" Width="25" Height="25"
+                                  SelectedColor="{Binding SelectedColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                  AvailableColorsHeader="Palette"
+                                  StandardColorsHeader="Couleurs de base"
+                                  StandardButtonHeader="Standard"
+                                  RecentColorsHeader="Récemment utilisées"
+                                  UsingAlphaChannel="True"
+                                  AdvancedButtonHeader="Personnalisé" />
+                <Slider Width="100" Height="30" Minimum="1" Maximum="50"
+                        Value="{Binding StrokeSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="10,0"
+                        Foreground="Gray"
+                        TickFrequency="10" TickPlacement="BottomRight" IsSnapToTickEnabled="False">
+                    <Slider.LayoutTransform>
+                        <ScaleTransform ScaleY="0.7" CenterX="15" CenterY="15"/>
+                    </Slider.LayoutTransform>
+                </Slider>
+                <StackPanel Orientation="Horizontal">
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+                </StackPanel>
+                <Button Name="ToggleNSFW" 
+                        Command="{Binding ToggleNsfwCommand}" 
+                        Height="30" Width="40"
+                        Style="{StaticResource TopBarButtonStyle}">
+                    <Image Name="NsfwImage" Width="40"
+                           Source="{Binding Path=IsNsfw, Converter={StaticResource BoolToImageSourceConverter}}"/>
+                </Button>
+            </StackPanel>
+        </Border>
+        <Grid>
+            <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Grid DockPanel.Dock="Left" Margin="0,1,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Name="column" Width="{Binding Path=Width, Mode=OneWay, Converter={StaticResource GridLengthConverter}}" />
+                        <ColumnDefinition Width="6" />
+                        <ColumnDefinition Width="50"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Name="row" Height="{Binding Path=Height, Mode=OneWay, Converter={StaticResource GridLengthConverter}}" />
+                        <RowDefinition Height="6" />
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <Thumb Name="horizontal" Grid.Row="0" Grid.Column="1" Background="White" 
+                          Width="6" Height="6" DragDelta="GlisserMouvementRecu" 
+                          DragStarted="GlisserCommence" DragCompleted="GlisserTermine">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DragCompleted">
+                                <cmd:EventToCommand Command="{Binding SaveDimensionsCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Thumb>
+                    <Thumb Name="diagonal" Grid.Row="1" Grid.Column="1" Background="White" 
+                          Width="6" Height="6" DragDelta="GlisserMouvementRecu" 
+                          DragStarted="GlisserCommence" DragCompleted="GlisserTermine"
+                          >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DragCompleted">
+                                <cmd:EventToCommand Command="{Binding SaveDimensionsCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Thumb>
+                    <Thumb Name="vertical" Grid.Row="1" Grid.Column="0" Background="White" 
+                          Width="6" Height="6" DragDelta="GlisserMouvementRecu" 
+                          DragStarted="GlisserCommence" DragCompleted="GlisserTermine"
+                          >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="DragCompleted">
+                                <cmd:EventToCommand Command="{Binding SaveDimensionsCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Thumb>
+                    <Border BorderThickness="5,5,0,0" Margin="-4,-10,5,10">
+                        <InkCanvas Name="DrawingCanvas"
+                               ClipToBounds="True" 
+                               Height="{Binding Path=Height, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                               Width="{Binding Path=Width, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                               HorizontalAlignment="Stretch" 
+                               VerticalAlignment="Stretch"                           
+                               MouseLeave="DrawingCanvas_MouseLeave" 
+                               MouseMove="DrawingCanvas_MouseMove"                                              
+                               Strokes="{Binding Path=Strokes}" 
+                               EditingMode="{Binding Path=SelectedTool, Converter={StaticResource EditModeConverter}, Mode=TwoWay}"
+                               DefaultDrawingAttributes="{Binding Path=DrawingAttributes}" Margin="5,10,-5,-10">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionMoved">
+                                    <cmd:EventToCommand Command="{Binding SelectionTransformedCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="SelectionResized">
+                                    <cmd:EventToCommand Command="{Binding SelectionTransformedCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="SelectionChanging">
+                                    <cmd:EventToCommand Command="{Binding SelectionChangingCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="StrokeErasing">
+                                    <cmd:EventToCommand Command="{Binding StrokeErasingCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="EditingModeChanged">
+                                    <cmd:EventToCommand Command="{Binding EditingModeChangedCommand}" PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </InkCanvas>
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="12" Opacity="0.15"/>
+                        </Border.Effect>
+                    </Border>
+                </Grid>
+            </ScrollViewer>
+            <StackPanel Background="Transparent"
+                        Grid.Row="0"
+                        Height="25" 
+                        Margin="5,0,0,2"
+                        Orientation="Horizontal" 
+                        Panel.ZIndex="100"
+                        VerticalAlignment="Bottom">
+                <Label Name="CursorIcon" FontSize="16">
+                    <fa:FontAwesome Icon="Arrows" />
+                </Label>
+                <TextBlock Name="CursorPosition" HorizontalAlignment="Left" VerticalAlignment="Center" />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</UserControl>

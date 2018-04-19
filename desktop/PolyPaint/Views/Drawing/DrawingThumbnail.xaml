@@ -1,0 +1,109 @@
+﻿<Button x:Class="PolyPaint.Views.Drawing.DrawingThumbnail"
+             x:Name="Root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:PolyPaint.Converters"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:debug="debug-mode"
+        xmlns:clr="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d mc" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             Visibility="{Binding IsHidden, Converter={StaticResource BoolToCollapsedConverter}}">
+    <Button.Style>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="12" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="12" Opacity="0.3"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <EventTrigger RoutedEvent="Button.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                             From="0" To="100" 
+                                             Duration="0:1:0"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Button.Style>
+    <Button.Resources>
+        <clr:Double x:Key="ThumbnailSize">128</clr:Double>
+        <converters:BoolToVisibleConverter x:Key="BoolToVisibleConverter" />
+        <converters:BoolToRadiusConverter x:Key="BoolToRadiusConverter" />
+        <Style x:Key="ThumbnailStyle" TargetType="{x:Type Rectangle}">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="12" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="12" Opacity="0.3"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+                <EventTrigger RoutedEvent="Rectangle.Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                             From="0" To="100" 
+                                             Duration="0:1:0"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
+        </Style>
+    </Button.Resources>
+    <Button.Template>
+        <ControlTemplate>
+            <Grid>
+                <Rectangle Height="{StaticResource ThumbnailSize}" Width="{StaticResource ThumbnailSize}">
+                    <Rectangle.Fill>
+                        <ImageBrush ImageSource="{Binding ThumbnailUrl, Mode=OneWay,Converter={StaticResource StorageUrlConverter}}" Stretch="UniformToFill" />
+                    </Rectangle.Fill>
+                    <Rectangle.BitmapEffect>
+                        <BlurBitmapEffect Radius="{Binding Path=IsNsfw, Converter={StaticResource BoolToRadiusConverter}, Mode=OneWay}" KernelType="Gaussian" />
+                    </Rectangle.BitmapEffect>
+                </Rectangle>
+                <Image RenderTransformOrigin="0.5,0.5" 
+                       Source="/Resources/NSFW-stamp.png" 
+                       Visibility="{Binding Path=IsNsfw, Converter={StaticResource BoolToVisibleConverter}, Mode=OneWay}"
+                       Width="140">
+                    <Image.RenderTransform>
+                        <RotateTransform Angle="-45" />
+                    </Image.RenderTransform>
+                </Image>
+                <mc:AlternateContent>
+                    <mc:Choice Requires="debug">
+                        <Button Name="CloseButton"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Margin="10"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Command="{Binding DeleteCommand}"
+                        Style="{StaticResource CloseButtonStyle}">
+                            <fa:FontAwesome Icon="Times" />
+                        </Button>
+                    </mc:Choice>
+                </mc:AlternateContent>
+            </Grid>
+        </ControlTemplate>
+    </Button.Template>
+</Button>

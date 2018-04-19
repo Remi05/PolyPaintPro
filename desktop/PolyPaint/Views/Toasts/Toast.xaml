@@ -1,0 +1,45 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PolyPaint.Views.Toasts"
+        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="PolyPaint.Views.Toasts.Toast"
+        mc:Ignorable="d"
+        Cursor="Hand"
+        Title="Toast" Height="300" Width="300" AllowsTransparency="true" Background="Transparent" WindowStyle="None" ShowInTaskbar="False" MouseLeftButtonUp="Window_MouseLeftButtonUp" >
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Image.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Duration="00:00:01" Storyboard.TargetProperty="Opacity" From="0" To="1" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+    <Grid RenderTransformOrigin="0,1" Margin="10">
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="10" Direction="-90" RenderingBias="Performance" ShadowDepth="3" Color="#EE111111"/>
+        </Grid.Effect>
+        <StackPanel Orientation="Horizontal" Background="#A5000000">
+            <StackPanel Width="90">
+                <Image Source="{ Binding ImageUri }" x:Name="Image" Width="70" Margin="10,10,10,223" Height="70" Stretch="UniformToFill">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="10" Direction="-45" RenderingBias="Performance" ShadowDepth="4" Color="#FF636363"/>
+                    </Image.Effect>
+                </Image>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Margin="0,10,0,0" Width="auto" Height="auto">
+                <Label Content="{Binding Title}" Width="auto" FontFamily="Roboto" FontWeight="Bold" FontSize="18" Foreground="White"/>
+                <TextBlock Text="{Binding Description}" 
+                           Width="280" 
+                           Height="auto" 
+                           FontFamily="Roboto" 
+                           FontSize="14" 
+                           Foreground="White" 
+                           TextWrapping="WrapWithOverflow">
+                </TextBlock>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,44 @@
+﻿{
+  "People": {
+    "jcavalleri": {
+      "Age": 24,
+      "Motto": "Love means never having to say you're sorry",
+      "Name": "Jennifer Cavalleri"
+    },
+    "vdude": {
+      "Age": 43,
+      "Motto": "They may take our lives, but they'll never take our freedom!",
+      "Name": "Viking dude"
+    },
+    "rreddings": {
+      "Age": 45,
+      "Motto": "Get busy living, or get busy dying.",
+      "Name": "Red Reddings"
+    },
+    "jbond": {
+      "Age": 24,
+      "Motto": "Bond. James bond.",
+      "Name": "James bond."
+    },
+    "wwhitman": {
+      "Age": 17,
+      "Motto": "Captain oh my captain",
+      "Name": "Walt Whitman"
+    },
+    "dvader": {
+      "Age": 222,
+      "Motto": "Luke, I'm your father",
+      "Name": "Darth Vader"
+    },
+    "et": {
+      "Age": 752,
+      "Motto": "E.T. phone home.",
+      "Name": "E.T."
+    },
+    "sholmes": {
+      "Age": 50,
+      "Motto": "Elementary, my dear Watson.",
+      "Name": "Sherlock Holmes"
+    }
+  }
+}

@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="PolyPaint.Views.Social.NewsfeedView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:local="clr-namespace:PolyPaint.Views.Social"
+             xmlns:converters="clr-namespace:PolyPaint.Converters"
+             xmlns:drawing="clr-namespace:PolyPaint.Views.Drawing"
+             xmlns:utils="clr-namespace:PolyPaint.Utils"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+        <converters:BoolToVisibleConverter x:Key="BoolToVisibleConverter" />
+    </UserControl.Resources>
+    <Grid Background="{x:Static utils:ThemeColors.SecondaryBackgroundLight}">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <ItemsControl ItemsSource="{Binding SortedPostsViewModels}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <drawing:PostView DataContext="{Binding}" Margin="75,22" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Label FontSize="36"
+                   Foreground="#555555"
+                   MinHeight="250" Width="600"
+                   HorizontalContentAlignment="Center" 
+                   VerticalContentAlignment="Center"
+                   Visibility="{Binding Path=IsLoading, Converter={StaticResource BoolToVisibleConverter}}">
+                    <fa:FontAwesome Icon="Spinner" Spin="True" SpinDuration="4" />
+                </Label>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

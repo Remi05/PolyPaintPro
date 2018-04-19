@@ -1,0 +1,190 @@
+﻿<UserControl x:Class="PolyPaint.Views.Messaging.ConversationsListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:converters="clr-namespace:PolyPaint.Converters"
+             xmlns:utils="clr-namespace:PolyPaint.Utils"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:IsMaximizedToBackgroundColorConverter x:Key="IsMaximizedToBackgroundColorConverter"/>
+        <converters:IsMaximizedToForegroundColorConverter x:Key="IsMaximizedToForegroundColorConverter"/>
+        <converters:IsMaximizedToHoveredBackgroundColorConverter x:Key="IsMaximizedToHoveredBackgroundColorConverter"/>
+        <converters:IsMaximizedToHoveredForegroundColorConverter x:Key="IsMaximizedToHoveredForegroundColorConverter"/>
+        <Style x:Key="HeaderStyle" TargetType="{x:Type Grid}">
+            <Setter Property="Background" Value="{Binding Path=IsMaximized, Converter={StaticResource IsMaximizedToBackgroundColorConverter}}" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Background" Value="{Binding Path=IsMaximized, Converter={StaticResource IsMaximizedToHoveredBackgroundColorConverter}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="HeaderButtonStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="Foreground" Value="{Binding Path=IsMaximized, Converter={StaticResource IsMaximizedToForegroundColorConverter}}" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Width" Value="24" />
+            <Setter Property="Margin" Value="0,3" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <Setter Property="Foreground" Value="{Binding Path=IsMaximized, Converter={StaticResource IsMaximizedToHoveredForegroundColorConverter}}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel 
+        Margin="0,0,20,0"
+        VerticalAlignment="Bottom"
+        Width="270">
+        <Button Name="Header"
+                Command="{Binding ToggleMaximizedCommand }"
+                Height="30">
+            <Button.Template>
+                <ControlTemplate>
+                    <Grid Style="{StaticResource HeaderStyle}">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Name="Title" 
+                                Content="Chat Channels"
+                                FontSize="13"
+                                Foreground="{Binding Path=IsMaximized, Converter={StaticResource IsMaximizedToHoveredForegroundColorConverter}}"
+                                Margin="10,0,0,0" 
+                                VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel 
+                            HorizontalAlignment="Right" 
+                            Margin="0,0,5,0"
+                            Orientation="Horizontal">
+                            <Button Name="CreateConversationButton" 
+                                    Command="{Binding ToggleSearchingConversationCommand }"
+                                    Style="{StaticResource HeaderButtonStyle}">
+                                <fa:FontAwesome Icon="Search" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <DockPanel Background="#F7F7F7"
+                   Height="300"
+                   LastChildFill="True"
+                   Visibility="{Binding Path=IsMaximized, Converter={StaticResource BoolToVisibleConverter}}">
+            <StackPanel DockPanel.Dock="Top"
+                        Visibility="{Binding Path=IsSearchingConversation, Converter={StaticResource BoolToVisibleConverter}}">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=FindConversationTextBox, Path=IsVisible}" Value="True">
+                                <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=FindConversationTextBox}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <Border BorderBrush="#A2A2A2" 
+                        BorderThickness="0.75" 
+                        Height="30"
+                        HorizontalAlignment="Stretch">
+                    <Grid>
+                        <TextBox Name="FindConversationTextBox" 
+                             AcceptsReturn="False" 
+                             Background="Transparent" 
+                             BorderThickness="0" 
+                             Margin="-1,0,0,0" 
+                             Padding="4,0,0,0"
+                             Panel.ZIndex="100" 
+                             Text="{Binding Path=ConversationName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             TextWrapping="Wrap" 
+                             VerticalContentAlignment="Center">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding CreateOrJoinConversationCommand}" />
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Label Name="FindConversationHint" 
+                               Content="{Binding HintMessage}" 
+                               Foreground="#AFAFAF" 
+                               Grid.Row="0"  
+                               VerticalContentAlignment="Center" />
+                    </Grid>
+                </Border>
+                <Button Command="{Binding CreateOrJoinConversationCommand}" 
+                        DockPanel.Dock="Top" 
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        Visibility="{Binding CanCreateConversation, Converter={StaticResource BoolToVisibleConverter}}">
+                    <Button.Template>
+                        <ControlTemplate>
+                            <Grid>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Background" Value="White" />
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Cursor" Value="Hand" />
+                                                <Setter Property="Background" Value="#F6F6F6" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <Border BorderBrush="#FFDFDFDF" BorderThickness="1.5" Margin="0,0,0,-1.5">
+                                    <Grid Margin="10,0,0,0" VerticalAlignment="Center">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="25" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0"
+                                           FontSize="18" 
+                                           Foreground="{x:Static utils:ThemeColors.MainBackground}"
+                                           VerticalAlignment="Center">
+                                            <fa:FontAwesome Icon="PlusSquareOutline" />
+                                        </Label>
+                                        <Label Content="{Binding ConversationCreationText}"
+                                               Grid.Column="1"
+                                               FontSize="13" 
+                                               Foreground="{x:Static utils:ThemeColors.MainBackground}"
+                                               VerticalAlignment="Center" />
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+            </StackPanel>
+            <Label FontSize="36"
+                   Foreground="#555555"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"
+                   Visibility="{Binding Path=IsLoading, Converter={StaticResource BoolToVisibleConverter}}">
+                <fa:FontAwesome Icon="Spinner" Spin="True" SpinDuration="4" />
+            </Label>
+            <ScrollViewer Name="ConversationsList"
+                          VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding Path=IsLoading, Converter={StaticResource BoolToCollapsedConverter}}">
+                <ItemsControl ItemsSource="{Binding FilteredConversations}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Background="White" Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </DockPanel>
+    </StackPanel>
+</UserControl>

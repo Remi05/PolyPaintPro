@@ -1,0 +1,45 @@
+﻿<Window x:Class="PolyPaint.Views.FacebookCaptionView"
+       x:Name="This"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Margin="10"
+        Title="Facebook sharing" AllowsTransparency="True" Background="Transparent" Height="350" Width="415" Topmost="True" WindowStartupLocation="CenterScreen" WindowStyle="None" MouseDown="Window_MouseDown">
+    <Grid RenderTransformOrigin="0,1" Margin="10" Background="White">
+        <Grid.Effect>
+            <DropShadowEffect BlurRadius="10" Direction="-90" RenderingBias="Performance" ShadowDepth="3" Color="Black" Opacity="0.25"/>
+        </Grid.Effect>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="30"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Name="CloseButton"
+                Grid.Row="0"
+                Grid.Column="2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                
+                Style="{StaticResource CloseButtonStyle}" Click="CloseButton_Click">
+            <fa:FontAwesome Icon="Times" />
+        </Button>
+
+        <StackPanel Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Margin="0,20,0,0">
+            <Image Source="/Resources/facebook.png" ></Image>
+            <Label Style="{StaticResource TextBoxStyle}" Content="Add a caption to your drawing!" Margin="0,0,-10,0"/>
+            <TextBox Name="Caption" Style="{StaticResource TextBoxStyle}" Height="100" Margin="10,0,10.5,0" TextWrapping="Wrap" Width="Auto"/>
+            <Button Height="30" Width="100" HorizontalAlignment="Right" Margin="0,15,0,0" Style="{StaticResource BlueButtonStyle}" Click="ShareCaption">
+                <Label Foreground="#fff" Content="Share!"/>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
