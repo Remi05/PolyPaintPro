@@ -28,11 +28,17 @@ Collaborative drawing app and social media
 ## Chat
 ![](captures/chat.png)
 
+## Create Conversation
+![](captures/create_conversation.png)
+
 ## Tutorial
 ![](captures/tutorial_start.png)
 
 ## User Search
 ![](captures/usersearch_withresults.png)
+
+## Drawing Search
+![](captures/drawingsearch_noresults.png)
 
 ## Achievements
 ![](captures/achievements.png)
